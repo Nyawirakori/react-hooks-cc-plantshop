@@ -7,6 +7,7 @@ import {useEffect,useState} from "react";
 function PlantPage() {
 
   const [plants,setPlants] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); //state for handling searching plants
 
 //GET request-allow all the components to have acccess to plants
 async function getPlants(){
@@ -25,11 +26,17 @@ useEffect(() =>{
   getPlants();
 }, [])//([]) part is a dependancy array that ensures the effect runs once the component mounts
 //(appears on the screen for the first time)
+
+//filtering plants
+const filteredPlants = plants.filter((plant) =>
+    plant.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <main>
-      <NewPlantForm />
-      <Search />
-      <PlantList plants={plants}/>
+      <NewPlantForm setPlants={setPlants}/>
+      <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <PlantList plants={filteredPlants}/>
     </main>
   );
 }
